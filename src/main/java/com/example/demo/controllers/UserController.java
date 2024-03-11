@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.payloads.UserDto;
 import com.example.demo.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/users")
 
@@ -29,7 +31,7 @@ public class UserController {
 	//POST - CREATE USER
 	//When we will get Post request it will trigger this function to create a new user
 	@PostMapping("/")
-	public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto)
+	public ResponseEntity<UserDto> createUser(@Valid @RequestBody UserDto userDto)
 	{
 		UserDto createduserDto = userservice.createUser(userDto);
 		
@@ -38,7 +40,7 @@ public class UserController {
 	
 	//Passing userID that needs to be updated with data present in object of user which is passed in json
 	@PutMapping("/{userId}")
-	public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto , @PathVariable Integer userId)
+	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto userDto , @PathVariable Integer userId)
 	{
 		UserDto updateduserDto = userservice.updateUser(userDto, userId);
 		return ResponseEntity.ok(updateduserDto);

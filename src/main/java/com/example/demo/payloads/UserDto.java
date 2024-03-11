@@ -1,5 +1,9 @@
 package com.example.demo.payloads;
 
+
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +17,16 @@ import lombok.Setter;
 @Setter
 public class UserDto {
 	private int id;
+	
+	@NotBlank
 	private String name;
+	
+	@Email
 	private String email;
+	
+	@NotBlank
 	private String password;
+	
+	@NotBlank
 	private String about;
 }
