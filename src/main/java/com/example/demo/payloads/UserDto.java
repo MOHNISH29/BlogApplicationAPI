@@ -21,7 +21,7 @@ public class UserDto {
 	@NotBlank
 	private String name;
 	
-	@Email
+	@Email(message = "Email address is not valid!")
 	private String email;
 	
 	@NotBlank
