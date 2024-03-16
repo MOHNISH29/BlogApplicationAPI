@@ -3,6 +3,7 @@ package com.example.demo.payloads;
 import java.util.Date;
 
 import com.example.demo.entities.Category;
+import com.example.demo.entities.User;
 
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -26,6 +27,11 @@ public class PostDto {
 	private Date postAddDate;
 	private String postImageUrl;
 	
+	@ManyToOne
+	private CategoryDto category;
+	
+	@ManyToOne
+	private UserDto user;
 	
 	
 }
