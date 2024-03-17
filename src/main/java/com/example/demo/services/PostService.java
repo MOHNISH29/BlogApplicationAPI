@@ -3,6 +3,7 @@ package com.example.demo.services;
 import java.util.List;
 
 import com.example.demo.payloads.PostDto;
+import com.example.demo.payloads.PostResponse;
 
 public interface PostService {
 	
@@ -10,7 +11,8 @@ public interface PostService {
 	PostDto getPostById(Integer postId);
 	PostDto updatePost(PostDto post , Integer postId);
 	void deletePost(Integer postId);
-	List<PostDto> getAllPost();
+	PostResponse getAllPost(Integer PageNumber,Integer PageSize);
+	//List<PostDto> getAllPost(Integer PageNumber,Integer PageSize);
 	List<PostDto> getAllPostByCategory(Integer categoryId);
 	List<PostDto> getAllPostByUser(Integer userId);
 	List<PostDto> searchPostByKeyword(String keyword);

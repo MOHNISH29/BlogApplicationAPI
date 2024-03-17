@@ -7,6 +7,10 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+//import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Category;
@@ -14,6 +18,7 @@ import com.example.demo.entities.Post;
 import com.example.demo.entities.User;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.payloads.PostDto;
+import com.example.demo.payloads.PostResponse;
 import com.example.demo.repositories.CategoryRepo;
 import com.example.demo.repositories.PostRepo;
 import com.example.demo.repositories.UserRepo;
@@ -58,8 +63,8 @@ public class PostServiceImpl implements PostService{
 		Post post = postrepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post" , "postId" , postId));
 		post.setPostContent(postdto.getPostContent());
 		post.setPostTitle(postdto.getPostTitle());
-		post.setPostAddDate(postdto.getPostAddDate());
 		post.setPostImageUrl(postdto.getPostImageUrl());
+		post.setCategory(null);
 		return PosttoDto(post);
 	}
 
@@ -71,14 +76,25 @@ public class PostServiceImpl implements PostService{
 	}
 
 	@Override
-	public List<PostDto> getAllPost() {
+	public PostResponse getAllPost(Integer PageNumber,Integer PageSize) {
+		Pageable p = PageRequest.of(PageNumber, PageSize);
 		List<PostDto> listOfAllPosts = new ArrayList<>();
-		List<Post> listPost = postrepo.findAll();
+		Page<Post> PagelistPost = postrepo.findAll(p);
+		List<Post> listPost = PagelistPost.getContent();
 		for(Post post : listPost)
 		{
 			listOfAllPosts.add(PosttoDto(post));
 		}
-		return listOfAllPosts;
+		
+		PostResponse postResponse = new PostResponse();
+		postResponse.setPostContent(listOfAllPosts);
+		postResponse.setPageNum(PagelistPost.getNumber());
+		postResponse.setPageSize(PagelistPost.getSize());
+		postResponse.setTotal_pages(PagelistPost.getTotalPages());
+		postResponse.setTotal_records(PagelistPost.getTotalElements());
+		postResponse.setLastPage(PagelistPost.isLast());
+		
+		return postResponse;
 	}
 
 	@Override

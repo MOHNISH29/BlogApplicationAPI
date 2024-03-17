@@ -5,14 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.payloads.DeleteResponse;
 import com.example.demo.payloads.PostDto;
+import com.example.demo.payloads.PostResponse;
 import com.example.demo.services.PostService;
 
 @RestController
@@ -51,11 +56,28 @@ public class PostController {
 	}
 	
 	@GetMapping("/posts")
-	public ResponseEntity<List<PostDto>> getAllPostsHere()
+	public ResponseEntity<PostResponse> getAllPostsHere(@RequestParam(value="PageNumber",defaultValue="0",required=false)Integer PageNumber,
+			@RequestParam(value="PageSize" , defaultValue="10" , required=false)Integer PageSize)
 	{
-		List<PostDto> AllPosts = postService.getAllPost();
-		return ResponseEntity.ok(AllPosts);
+		PostResponse pResponse = postService.getAllPost(PageNumber,PageSize);
+		return ResponseEntity.ok(pResponse);
 	}
+	
+	@PutMapping("/posts/{postId}")
+	public ResponseEntity<PostDto> updateThePost(@RequestBody PostDto postdto , @PathVariable Integer postId)
+	{
+		PostDto postUpdated = postService.updatePost(postdto, postId);
+		return ResponseEntity.ok(postUpdated);
+		
+	}
+	
+	@DeleteMapping("/posts/{postId}")
+	public ResponseEntity<DeleteResponse> deleteThePost(@PathVariable Integer postId)
+	{
+		postService.deletePost(postId);
+		return new ResponseEntity<DeleteResponse>(new DeleteResponse("This post is deleted") , HttpStatus.ACCEPTED);
+	}
+	
 	
 	
 	
