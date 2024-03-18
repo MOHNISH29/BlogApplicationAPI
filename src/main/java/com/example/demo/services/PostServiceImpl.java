@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 //import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.Category;
@@ -76,8 +77,8 @@ public class PostServiceImpl implements PostService{
 	}
 
 	@Override
-	public PostResponse getAllPost(Integer PageNumber,Integer PageSize) {
-		Pageable p = PageRequest.of(PageNumber, PageSize);
+	public PostResponse getAllPost(Integer PageNumber,Integer PageSize,String sortBy) {
+		Pageable p = PageRequest.of(PageNumber, PageSize, Sort.by(sortBy));
 		List<PostDto> listOfAllPosts = new ArrayList<>();
 		Page<Post> PagelistPost = postrepo.findAll(p);
 		List<Post> listPost = PagelistPost.getContent();
