@@ -79,8 +79,13 @@ public class PostController {
 		return new ResponseEntity<DeleteResponse>(new DeleteResponse("This post is deleted") , HttpStatus.ACCEPTED);
 	}
 	
-	
-	
+	@GetMapping("/posts/search")
+	public ResponseEntity<List<PostDto>> getAllpostsByKeyword(@RequestParam(value="Keyword" , required=true) String keyword)
+	{
+		List<PostDto> AllPostsByGivenKeyword=postService.searchPostByKeyword(keyword);
+		return new ResponseEntity<List<PostDto>>(AllPostsByGivenKeyword , HttpStatus.OK);
+		
+	}
 	
 	
 }

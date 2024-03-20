@@ -126,8 +126,14 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public List<PostDto> searchPostByKeyword(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Post> Posts = postrepo.findByPostTitle(keyword);
+		List<PostDto> NewPosts = new ArrayList<PostDto>();
+		for (Post p : Posts)
+		{
+			NewPosts.add(PosttoDto(p));
+		}
+		return NewPosts;
+		
 	}
 	
 	public Post DtotoPost(PostDto postdto)
