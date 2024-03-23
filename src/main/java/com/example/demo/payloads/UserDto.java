@@ -2,6 +2,14 @@ package com.example.demo.payloads;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.example.demo.entities.Comment;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -29,4 +37,8 @@ public class UserDto {
 	
 	@NotBlank
 	private String about;
+	
+	@OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
+	private List<Comment> comments = new ArrayList<>();
+	
 }

@@ -1,9 +1,14 @@
 package com.example.demo.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entities.Post;
+import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.payloads.DeleteResponse;
 import com.example.demo.payloads.PostDto;
 import com.example.demo.payloads.PostResponse;
+import com.example.demo.repositories.PostRepo;
+import com.example.demo.services.ImageUploadService;
 import com.example.demo.services.PostService;
 
 @RestController
@@ -26,6 +36,15 @@ public class PostController {
 
 	@Autowired
 	PostService postService;
+	
+	@Autowired
+	ImageUploadService imageService;
+	
+	@Autowired
+	private PostRepo postrepo;
+	
+	@Value("${image.upload.path}")
+	private String ImagePath;
 	
 	@PostMapping("/users/{userId}/categories/{categoryId}/posts")
 	public ResponseEntity<PostDto> createPost(@PathVariable Integer userId ,@PathVariable Integer categoryId ,@RequestBody PostDto posts)
@@ -85,6 +104,28 @@ public class PostController {
 		List<PostDto> AllPostsByGivenKeyword=postService.searchPostByKeyword(keyword);
 		return new ResponseEntity<List<PostDto>>(AllPostsByGivenKeyword , HttpStatus.OK);
 		
+	}
+	
+	@PostMapping("/posts/image/upload/{postId}")
+	public ResponseEntity<PostDto> uploadtheImage(@RequestParam("image") MultipartFile imageFile, @PathVariable Integer postId)
+	{
+		PostDto postDto = new PostDto();
+		try {
+			postDto = imageService.uploadthisImage(imageFile, postId);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<PostDto>(postDto , HttpStatus.OK);
+	}
+	
+	@GetMapping("/posts/serve/{postId}")
+	public ResponseEntity<byte[]> servetheImage(@PathVariable Integer postId) throws IOException
+	{
+		Post post = postrepo.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post" , "postId" , postId));
+		String  imageName = post.getPostImageUrl();
+		byte[] imageBody = Files.readAllBytes(Paths.get(ImagePath+imageName));
+		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageBody);
 	}
 	
 	

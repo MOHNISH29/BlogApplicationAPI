@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService{
 		User user = userrepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User" , "userId" , userId));
 		Category cat = categoryrepo.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category" , "categoryId",categoryId));
 		Post post = DtotoPost(postdto);
-		post.setPostImageUrl("NewImage.jpg");
+		//post.setPostImageUrl("NewImage.jpg");
 		post.setPostAddDate(new Date());
 		post.setCategory(cat);
 		post.setUser(user);
@@ -66,7 +66,8 @@ public class PostServiceImpl implements PostService{
 		post.setPostTitle(postdto.getPostTitle());
 		post.setPostImageUrl(postdto.getPostImageUrl());
 		post.setCategory(null);
-		return PosttoDto(post);
+		Post savedPost = postrepo.save(post);
+		return PosttoDto(savedPost);
 	}
 
 	@Override
