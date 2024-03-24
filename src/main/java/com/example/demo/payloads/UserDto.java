@@ -39,6 +39,6 @@ public class UserDto {
 	private String about;
 	
 	@OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , fetch = FetchType.LAZY)
-	private List<Comment> comments = new ArrayList<>();
+	private List<CommentDto> comments = new ArrayList<>();
 	
 }

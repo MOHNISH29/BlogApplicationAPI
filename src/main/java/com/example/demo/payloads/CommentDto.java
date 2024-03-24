@@ -15,9 +15,9 @@ public class CommentDto {
 	private int commentId;
 	private String commentContent;
 	
-	@ManyToOne
-	private UserDto user;
-	
-	@ManyToOne
-	private PostDto post;
+//	@ManyToOne
+//	private UserDto user;
+//	
+//	@ManyToOne
+//	private PostDto post;
 }
