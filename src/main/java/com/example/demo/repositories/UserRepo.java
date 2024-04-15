@@ -1,6 +1,7 @@
 package com.example.demo.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,6 +12,6 @@ import com.example.demo.payloads.UserDto;
 //use in subclass
 public interface UserRepo extends JpaRepository<User , Integer>{
 
-	
+	Optional<User> findByEmail(String email);
 	
 }

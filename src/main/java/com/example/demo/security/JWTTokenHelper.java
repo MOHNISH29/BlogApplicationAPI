@@ -19,7 +19,8 @@ import io.jsonwebtoken.security.SignatureAlgorithm;
 @Component
 public class JWTTokenHelper {
 	public static final long TOKEN_VALIDITY = 5*60*60;
-	SecretKey secret = Keys.hmacShaKeyFor(Decoders.BASE64.decode("secret"));
+	SecretKey secret = Keys.hmacShaKeyFor(Decoders.BASE64.decode("cmdkmcoifjwifj9vs90dcdcddcsdwwwdwddd344343AAAAAmdmvkvdppzpppPP"));
+	//SecretKey secret=Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded("secret");
 	//private String key = "secret";
 	
 	//getting username from token
@@ -64,10 +65,10 @@ public class JWTTokenHelper {
 	public String doGenerateToken(Map<String , Object>claims , String subject)
 	{
 		return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*1))
+                .claims(claims)
+                .subject(subject)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis()+1000*60*1))
                 .signWith(secret).compact();
 	}
 	
